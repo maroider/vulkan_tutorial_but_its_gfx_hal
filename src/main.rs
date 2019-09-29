@@ -1,4 +1,9 @@
-use gfx_backend_vulkan::Instance;
+use gfx_backend_vulkan as backend;
+use gfx_hal::{
+    adapter::DeviceType,
+    queue::{QueueFamilyId, QueueType},
+    Adapter, Features, Instance, PhysicalDevice, QueueFamily,
+};
 use winit::{
     dpi::LogicalSize,
     event::{Event, WindowEvent},
@@ -14,6 +19,8 @@ fn main() {
         .build(&event_loop)
         .unwrap();
 
+    let app = Application::init();
+
     event_loop.run(move |event, _, control_flow| match event {
         Event::WindowEvent {
             event: WindowEvent::CloseRequested,
@@ -23,12 +30,39 @@ fn main() {
     });
 }
 
-pub struct Application {}
+pub struct Application {
+    instance: backend::Instance,
+    adapter: Adapter<backend::Backend>,
+    graphics_family_id: QueueFamilyId,
+}
 
 impl Application {
     fn init() -> Self {
-        let instance = Instance::create("vulkan_tutorial_but_its_gfx_hal", 0);
+        let instance = backend::Instance::create("vulkan_tutorial_but_its_gfx_hal", 0);
 
-        Self {}
+        let adapters = instance.enumerate_adapters();
+        let adapter = adapters
+            .into_iter()
+            .find(|adapter| {
+                adapter.info.device_type == DeviceType::DiscreteGpu
+                    && adapter
+                        .physical_device
+                        .features()
+                        .contains(Features::GEOMETRY_SHADER)
+            })
+            .expect("Could not find suitable graphics adapter");
+
+        let graphics_family = adapter
+            .queue_families
+            .iter()
+            .find(|family| family.queue_type() == QueueType::Graphics)
+            .expect("Could not find a graphics queue family");
+        let graphics_family_id = graphics_family.id();
+
+        Self {
+            instance,
+            adapter,
+            graphics_family_id,
+        }
     }
 }

@@ -9,7 +9,7 @@ This is an attempt to follow the vulkan tutorial found [here](https://vulkan-tut
      - [x] Base Code
      - [x] Instance
      - [ ] Validation layers
-     - [ ] Physical devices and queue families
+     - [x] Physical devices and queue families
      - [ ] Logical device and queues
    - [ ] Presentation
      - [ ] Window surface
