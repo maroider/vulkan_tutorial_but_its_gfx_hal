@@ -1,3 +1,4 @@
+use gfx_backend_vulkan::Instance;
 use winit::{
     dpi::LogicalSize,
     event::{Event, WindowEvent},
@@ -20,4 +21,14 @@ fn main() {
         } if window_id == window.id() => *control_flow = ControlFlow::Exit,
         _ => *control_flow = ControlFlow::Wait,
     });
+}
+
+pub struct Application {}
+
+impl Application {
+    fn init() -> Self {
+        let instance = Instance::create("vulkan_tutorial_but_its_gfx_hal", 0);
+
+        Self {}
+    }
 }
