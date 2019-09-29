@@ -6,7 +6,7 @@ This is an attempt to follow the vulkan tutorial found [here](https://vulkan-tut
 
  - [ ] Drawing a triangle
    - [ ] Setup
-     - [ ] Base Code
+     - [x] Base Code
      - [ ] Instance
      - [ ] Validation layers
      - [ ] Physical devices and queue families

@@ -5,3 +5,10 @@ authors = ["Markus Røyset <maroider@protonmail.com>"]
 edition = "2018"
 
 [dependencies]
+env_logger = "0.7.0"
+gfx-backend-vulkan = "0.3.3"
+gfx-hal = "0.3.1"
+glsl-to-spirv = "0.1.7"
+lazy_static = "1.4.0"
+log = "0.4.8"
+winit = "0.20.0-alpha3"
