@@ -1,9 +1,5 @@
 use gfx_backend_vulkan as backend;
-use gfx_hal::{
-    adapter::DeviceType,
-    queue::{QueueFamilyId, QueueType},
-    Adapter, Features, Instance, PhysicalDevice, QueueFamily,
-};
+use gfx_hal::{Adapter, Features, Instance, PhysicalDevice, QueueFamily};
 use winit::{
     dpi::LogicalSize,
     event::{Event, WindowEvent},
@@ -33,7 +29,6 @@ fn main() {
 pub struct Application {
     instance: backend::Instance,
     adapter: Adapter<backend::Backend>,
-    graphics_family_id: QueueFamilyId,
 }
 
 impl Application {
@@ -56,12 +51,14 @@ impl Application {
             .iter()
             .find(|family| family.supports_graphics())
             .expect("Could not find a graphics queue family");
-        let graphics_family_id = graphics_family.id();
 
-        Self {
-            instance,
-            adapter,
-            graphics_family_id,
+        let gpu = unsafe {
+            adapter
+                .physical_device
+                .open(&[(&graphics_family, &[1.0])], Features::GEOMETRY_SHADER)
         }
+        .expect("Could not create logical device");
+
+        Self { instance, adapter }
     }
 }
