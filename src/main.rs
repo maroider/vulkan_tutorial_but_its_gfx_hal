@@ -44,18 +44,17 @@ impl Application {
         let adapter = adapters
             .into_iter()
             .find(|adapter| {
-                adapter.info.device_type == DeviceType::DiscreteGpu
-                    && adapter
-                        .physical_device
-                        .features()
-                        .contains(Features::GEOMETRY_SHADER)
+                adapter
+                    .physical_device
+                    .features()
+                    .contains(Features::GEOMETRY_SHADER)
             })
             .expect("Could not find suitable graphics adapter");
 
         let graphics_family = adapter
             .queue_families
             .iter()
-            .find(|family| family.queue_type() == QueueType::Graphics)
+            .find(|family| family.supports_graphics())
             .expect("Could not find a graphics queue family");
         let graphics_family_id = graphics_family.id();
 
